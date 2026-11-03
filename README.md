@@ -1,69 +1,170 @@
-# Getting Remote Data Lab
+# Flask Getting Remote Data Lab
 
-## The Scenario 
-It is time to practice building out your own class for retrieving remote data. In this lab, you are tasked with building a generic GetRequester class. This class will be able to take in a URL on initialization and send an HTTP GET request on command. You will also need to build a method for dealing with requests that return JSON.
+## Project Overview
 
-## Tools and Resources 
-- [GitHub Repo](https://github.com/learn-co-curriculum/flask-getting-remote-data-lab)
-- [GET - Mozilla](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET)
-- [HTTP methods - Mozilla](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
-- [requests](https://requests.readthedocs.io/en/latest/)
-- [Python JSON](https://docs.python.org/3/library/json.html)
+This project implements a reusable Python class called `GetRequester` for retrieving data from remote APIs using HTTP GET requests.
 
-## Instructions
+The class accepts a URL during initialization, retrieves the raw HTTP response, and provides a method for converting JSON responses into native Python data structures.
 
-### Set Up
+The project uses a company directory API as an example, retrieving employee information such as names and occupations.
 
-Before we begin coding, let's complete the initial setup for this lesson: 
+## Features
 
-* Fork and Clone
-  * For this lesson, you will need the following GitHub Repo:
-  * Go to the provided GitHub repository link.
-  * Fork the repository to your GitHub account.
-  * Clone the forked repository to your local machine.
-* Open and Run File
-  * Open the project in VSCode.
-  * Run pipenv install to install all necessary dependencies.
-  * Run pipenv shell to open instance of python shell
+- Reusable `GetRequester` class.
+- HTTP GET requests using the Python `requests` library.
+- Retrieves raw response content as bytes.
+- Converts JSON responses into Python lists and dictionaries.
+- HTTP error handling using `raise_for_status()`.
+- Request timeout of 10 seconds.
+- Automated tests using pytest.
 
-### Task 1: Define the Problem
+## Technologies Used
 
-* Build a class to interact with api
-* Get the data
-* Convert to json data
+- Python 3
+- Requests
+- JSON
+- Pytest
+- Git and GitHub
 
-### Task 2: Determine the Design
+## API Endpoint
 
-* Endpoint: https://learn-co-curriculum.github.io/json-site-example/endpoints/people.json.
-  * ```get_response_body```
-    * Query endpoint
-  * ```load_json```
-    * Convert to json data
+The project uses the following remote JSON endpoint:
 
-#### Task 3: Develop, Test, and Refine the Code
+https://learn-co-curriculum.github.io/json-site-example/endpoints/people.json
 
-* Create feature branch
-* Build get_response_body to query endpoint
-* Convert endpoint data to json and return the data
-* Push feature branch and open a PR on GitHub
-* Merge to main
+## Project Structure
 
-#### Task 4: Document and Maintain
+```text
+flask-getting-remote-data-lab/
+│
+├── lib/
+│   ├── GetRequester.py
+│   └── testing/
+│       ├── conftest.py
+│       └── get_requester_test.py
+│
+├── Pipfile
+├── Pipfile.lock
+├── pytest.ini
+├── README.md
+├── .gitignore
+└── LICENSE.md
+```
 
-Best Practice documentation steps:
-* Add comments to code to explain purpose and logic, clarifying intent / functionality of code to other developers.
-* Add screenshot of completed work included in Markdown in README.
-* Update README text to reflect the functionality of the application following https://makeareadme.com.
-* Delete any stale branches on GitHub
-* Remove unnecessary/commented out code
-* If needed, update git ignore to remove sensitive data
+## Installation and Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/petermulwa33/flask-getting-remote-data-lab.git
+
+cd flask-getting-remote-data-lab
+```
+
+### 2. Install dependencies
+
+```bash
+pipenv install
+```
+
+### 3. Activate the virtual environment
+
+```bash
+pipenv shell
+```
+
+## Implementation
+
+The `GetRequester` class is implemented in `lib/GetRequester.py`.
+
+### get_response_body()
+
+This method sends an HTTP GET request to the URL provided during initialization.
+
+It returns the raw response body as bytes and raises an exception when the HTTP request returns an unsuccessful status code.
+
+### load_json()
+
+This method calls `get_response_body()` and uses Python's built-in JSON module to convert the response into native Python data structures.
+
+## Usage Example
+
+```python
+from GetRequester import GetRequester
+
+url = "https://learn-co-curriculum.github.io/json-site-example/endpoints/people.json"
+
+requester = GetRequester(url)
+
+# Retrieve raw response
+response = requester.get_response_body()
+print(response)
+
+# Convert JSON into Python objects
+employees = requester.load_json()
+print(employees)
+
+# Check the resulting data type
+print(type(employees))
+```
+
+The parsed response is a Python list containing dictionaries representing employees.
+
+Example:
+
+```python
+[
+    {
+        "name": "Daniel",
+        "occupation": "LG Fridge Salesman"
+    },
+    {
+        "name": "Joe",
+        "occupation": "WiFi Fixer"
+    }
+]
+```
+
+## Running Tests
+
+Run the automated test suite from the project root:
+
+```bash
+pytest -v
+```
+
+The test suite verifies:
+
+1. `get_response_body()` returns the expected raw response.
+2. `load_json()` correctly converts the JSON response into Python data.
+
+### Test Results
+
+**Latest test result: 2 passed, 0 failed.**
+
+The test suite reports some deprecation warnings originating from the installed pytest assertion-rewriting implementation.
+
+## Tools and Resources
+
+- [GitHub Curriculum Repository](https://github.com/learn-co-curriculum/flask-getting-remote-data-lab)
+- [Mozilla Developer Network - HTTP GET](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET)
+- [Mozilla Developer Network - HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+- [Requests Documentation](https://requests.readthedocs.io/en/latest/)
+- [Python JSON Documentation](https://docs.python.org/3/library/json.html)
+- [Make a README](https://makeareadme.com/)
+
+## Learning Objectives
+
+This lab demonstrates:
+
+- Object-oriented programming in Python.
+- Making HTTP requests to external APIs.
+- Retrieving remote data.
+- Working with JSON responses.
+- Converting JSON into Python data structures.
+- Writing and running automated tests.
+- Using Git branches and GitHub pull requests.
 
 ## Submission
 
-Once all tests are passing and working code is pushed to the GitHub main branch, submit your GitHub repo through Canvas using CodeGrade.
-
-## Grading Criteria
-
-The application passes all test suites.
-* Get json data
-* Convert to Json
+Once all tests pass and the completed implementation has been merged into the GitHub `main` branch, submit the repository through Canvas using CodeGrade.
